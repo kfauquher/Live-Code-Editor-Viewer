@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100&display=swap" rel="stylesheet">
+        <Script src = "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+        <title>Live Code Preview</title>
+        
+        <!-- The start of our CSS -->
+    <style>
+      
+        html,body{
+            font-family: 'IBM Plex Mono', monospace;
+            margin:0px;
+            padding:0px;
+            height:100%;
+            width:100%;
+            background-image: url('bg.png');
+            background-size: cover;
+            overflow: hidden;
+        }
+        #editor {
+            box-shadow: 10px 10px 5px -2px rgba(0,0,0,0.34); 
+            height:86%;
+            width:50%;
+            display:inline-block;
+            opacity: .9;
+        }
+        #iframe {
+            background-color:#cccccc;
+            height:86%;
+            display:inline-block;
+            width:50%;
+            overflow: scroll; 
+            opacity: .9;
+        }
+        #container {
+            height:100%;
+            width:auto;
+            white-space:nowrap;
+        }
+        
+        .ace_editor .ace_marker-layer .ace_bracket { display: none }
+        
+    </style>
+    </head>
+    
+    <body onload = 'ready()'>
+        <h1 style="
+            font-size:60px; 
+            color:white; 
+            margin:1.5px; 
+            text-align: center;
+            ">live code preview</h1>
+       
+    <div id ='container'>
+    <div id ='editor'>  
+    </div>
+            
+    <iframe id = 'iframe' frameBorder='0'>                
+    </iframe>
+            
+    <script>
+        function update()
+{       //The content of the iframe. Gets content from editor and puts it on iframe.
+	var idoc = document.getElementById('iframe').contentWindow.document;
+	idoc.open();
+	idoc.write(editor.getValue());
+	idoc.close();
+}
+
+function setupEditor()
+{
+  //Your editor screen.
+  window.editor = ace.edit("editor");
+  editor.setTheme("ace/theme/monokai");
+  editor.getSession().setMode("ace/mode/html");
+  editor.setValue(`<!DOCTYPE html>
+<html>
+<head>
+</head>
+       
+<body>
+</body>
+
+</html>`,1);
+
+  //Calls the update function when something has changed in the editor.
+  editor.getSession().on('change', function() {
+  update();
+  });
+
+  editor.focus();
+  
+  //Special options for your editor
+  editor.setOptions({
+    fontSize: "16pt",
+    showLineNumbers: true,
+    showGutter: true,
+    vScrollBarAlwaysVisible:false,
+    enableBasicAutocompletion: false, enableLiveAutocompletion: false
+  });
+
+  editor.setShowPrintMargin(false);
+  editor.setBehavioursEnabled(false);
+}
+
+setupEditor();
+update();
+  
+    </script>
+        
+</body>
+</html>
